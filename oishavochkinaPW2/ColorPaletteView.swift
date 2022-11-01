@@ -10,6 +10,9 @@ import UIKit
 
 final class ColorPaletteView: UIControl {
     private let stackView = UIStackView()
+    private var redControl = ColorSliderView(colorName: "R", value: 0)
+    private var blueControl = ColorSliderView(colorName: "B", value: 0)
+    private var greenControl = ColorSliderView(colorName: "G", value: 0)
     var delegate:  ViewControllerProtocol?
     private(set) var chosenColor: UIColor = .systemGray6
     init() {
@@ -21,12 +24,12 @@ final class ColorPaletteView: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
     private func setupView() {
-        let redControl = ColorSliderView(colorName: "R", value:
-                                            Float(chosenColor.redComponent))
-        let greenControl = ColorSliderView(colorName: "G", value:
-                                            Float(chosenColor.greenComponent))
-        let blueControl = ColorSliderView(colorName: "B", value:
-                                            Float(chosenColor.blueComponent))
+        redControl = ColorSliderView(colorName: "R", value:
+                                        Float(chosenColor.redComponent))
+        greenControl = ColorSliderView(colorName: "G", value:
+                                        Float(chosenColor.greenComponent))
+        blueControl = ColorSliderView(colorName: "B", value:
+                                        Float(chosenColor.blueComponent))
         redControl.tag = 0
         greenControl.tag = 1
         blueControl.tag = 2
@@ -42,13 +45,10 @@ final class ColorPaletteView: UIControl {
             $0.addTarget(self, action: #selector(sliderMoved(slider:)),
                          for: .touchDragInside)
         }
-         addSubview(stackView)
-      //  stackView.pinTop(to: self, 0)
-     //   stackView.pin(to: self)
-     //   delegate?.changeColor()(self.sliderMoved(slider: stackView.redControl.touchDr)
+        addSubview(stackView)
         stackView.pinTop(to: self, 0)
         stackView.pinBottom(to: self, 0)
-       stackView.pinLeft(to: self, 0)
+        stackView.pinLeft(to: self, 0)
         stackView.pinRight(to: self, 0)
     }
     @objc
@@ -79,8 +79,20 @@ final class ColorPaletteView: UIControl {
         }
         sendActions(for: .touchDragInside)
     }
-    public func setColors(colorRed: CGFloat?, colorGreen: CGFloat?, colorBlue: CGFloat?) {
-        //  stackView.
+    public func setColors(color: UIColor?) {
+        let red = color?.redComponent
+        if (red != nil) {
+            redControl.set(num: Float(red.unsafelyUnwrapped))
+        }
+        let blue = color?.blueComponent
+        if (blue != nil) {
+            blueControl.set(num: Float(blue.unsafelyUnwrapped))
+        }
+        let green = color?.greenComponent
+        if (green != nil) {
+            greenControl.set(num: Float(green.unsafelyUnwrapped))
+        }
+        
     }
 }
 
@@ -93,9 +105,15 @@ extension ColorPaletteView {
             self.value = value
             super.init(frame: .zero)
             slider.value = value
+            slider.minimumValue = 0
+            slider.maximumValue = 256
             colorLabel.text = colorName
             setupView()
-            slider.addTarget(self, action: #selector(sliderMoved(_:)), for: .touchDragInside) //?
+            slider.addTarget(self, action: #selector(sliderMoved(_:)), for: .touchDragInside)
+        }
+        
+        public func set(num: Float) {
+            slider.setValue(256 * num, animated: false)
         }
         @available(*, unavailable)
         required init?(coder: NSCoder) {
@@ -107,13 +125,10 @@ extension ColorPaletteView {
             stackView.axis = .horizontal
             stackView.spacing = 8
             addSubview(stackView)
-          //  stackView.pin(to: self, [.left: 12, .top: 12, .right: 12, .bottom: 12])
-             stackView.pinTop(to: self, 12)
-              stackView.pinLeft(to: self, 12)
-               stackView.pinRight(to: self, 12)
-              stackView.pinBottom(to: self, 12)
-              // stackView.pin(to: self, [.left: 12, .top: 12, .right:
-              //       12, .bottom: 12])
+            stackView.pinTop(to: self, 12)
+            stackView.pinLeft(to: self, 12)
+            stackView.pinRight(to: self, 12)
+            stackView.pinBottom(to: self, 12)
         }
         @objc
         private func sliderMoved(_ slider: UISlider) {
@@ -159,3 +174,4 @@ extension UIColor {
         return alpha
     }
 }
+

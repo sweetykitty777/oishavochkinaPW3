@@ -7,7 +7,7 @@
 import UIKit
 
 protocol ViewControllerProtocol {
-   // func changeColor()
+    // func changeColor()
     func changeColor(_ slider: ColorPaletteView)
 }
 
@@ -20,7 +20,7 @@ class ViewController: UIViewController, ViewControllerProtocol  {
     let colorPaletteView = ColorPaletteView()
     
     private var value: Int = 0
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -150,7 +150,7 @@ class ViewController: UIViewController, ViewControllerProtocol  {
         }
     }
     
-     private func makeMenuButton(title: String) -> UIButton {
+    private func makeMenuButton(title: String) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -174,10 +174,10 @@ class ViewController: UIViewController, ViewControllerProtocol  {
                 sender.transform = CGAffineTransform.identity
             })
         }
-
+        
     }
     
-   private func setupMenuButtons() -> UIStackView {
+    private func setupMenuButtons() -> UIStackView {
         let colorsButton = makeMenuButton(title: "🎨")
         colorsButton.addTarget(self, action: #selector(paletteButtonPressed), for: .touchUpInside)
         
@@ -185,14 +185,13 @@ class ViewController: UIViewController, ViewControllerProtocol  {
         let newsButton = makeMenuButton(title: "📰")
         
         buttonsSV = UIStackView(arrangedSubviews:
-                                        [colorsButton, notesButton, newsButton])
+                                    [colorsButton, notesButton, newsButton])
         buttonsSV.spacing = 12
         buttonsSV.axis = .horizontal
         buttonsSV.distribution = .fillEqually
         self.view.addSubview(buttonsSV)
         buttonsSV.pinLeft(to: self.view, 24)
         buttonsSV.pinRight(to: self.view, 24)
-      //  buttonsSV.pin(to: self.view, [.left: 24, .right: 24])
         buttonsSV.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor, 24)
         return buttonsSV
     }
@@ -201,8 +200,8 @@ class ViewController: UIViewController, ViewControllerProtocol  {
         colorPaletteView.isHidden.toggle()
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
-    //    let color = view.backgroundColor.
-     //   colorPaletteView.setColors(color: color)
+        let color = view.backgroundColor
+        colorPaletteView.setColors(color: color)
         changeColor(colorPaletteView)
     }
     @objc
@@ -241,8 +240,6 @@ extension ColorPaletteView {
             stackView.pinBottom(to: self, 12)
             stackView.pinLeft(to: self, 12)
             stackView.pinRight(to: self, 12)
-           // stackView.pin(to: self, [.left: 12, .top: 12, .right:
-           //                             12, .bottom: 12])
         }
         @objc
         private func sliderMoved(_ slider: UISlider) {
@@ -252,7 +249,7 @@ extension ColorPaletteView {
     }
 }
 extension CALayer{
-     func applyShadow() {
+    func applyShadow() {
         self.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
         self.shadowOffset = CGSize(width: 0, height: 3)
         self.shadowOpacity = 1.0
@@ -261,11 +258,12 @@ extension CALayer{
     }
     
     func applyShadowPressed() {
-       self.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15).cgColor
-       self.shadowOffset = CGSize(width: 0, height: 3)
-       self.shadowOpacity = 1.0
+        self.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15).cgColor
+        self.shadowOffset = CGSize(width: 0, height: 3)
+        self.shadowOpacity = 1.0
         self.shadowRadius = 5.0
-       self.masksToBounds = false
-   }
+        self.masksToBounds = false
+    }
 }
+
 
